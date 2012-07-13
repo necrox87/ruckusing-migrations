@@ -192,6 +192,122 @@ class Ruckusing_MySQLAdapter extends Ruckusing_BaseAdapter implements Ruckusing_
 		return $this->query($query);
 	}
 
+	public function seed($table, $data, $multiple = false) {
+		
+		if(empty($table)) {
+			throw new Ruckusing_ArgumentException("Missing table name parameter");
+		}
+		
+		if(empty($data) || !is_array($data)) {
+			throw new Ruckusing_ArgumentException("Missing data parameter");
+		}
+		
+		//build query
+		if($multiple === true) {
+			
+			$queries = array();
+		}
+		else {
+			
+			$query = "INSERT INTO ".trim($table);
+			$columns = "";
+			$values = "";
+		}
+		
+		$i = 0;
+		foreach($data as $column => $value) {
+		
+			if(is_int($column)) {
+				
+				if($multiple === false) {
+					throw new Ruckusing_ArgumentException("Use flag $multiple = true for multiple transactions");
+				}
+				
+				$query = "INSERT INTO ".trim($table);
+				$columns = "";
+				$values = "";				
+				
+				$j = 0;
+				foreach($value as $c => $v) {
+				
+					if($j != 0) {
+						
+						$columns .= ", ".$this->identifier(mysql_real_escape_string($c))."";
+						$values  .= ", '".mysql_real_escape_string($v)."'";
+					}
+					else {
+						
+						$columns .= $this->identifier(mysql_real_escape_string($c));
+						$values  .= "'".mysql_real_escape_string($v)."'";
+					}	
+					
+					$j++;
+				}
+				
+				$query .= " (".$columns.")";
+				$query .= " VALUES (".$values.") ";				
+				
+				array_push($queries, $query);
+				unset($query);
+			}
+			else {
+				
+				if($multiple === true) {
+					throw new Ruckusing_ArgumentException("Use flag $multiple = false for single transaction");
+				}
+				
+				if($i != 0) {
+					
+					$columns .= ", ".$this->identifier(mysql_real_escape_string($column))."";
+					$values  .= ", '".mysql_real_escape_string($value)."'";
+				}
+				else {
+					
+					$columns .= $this->identifier(mysql_real_escape_string($column));
+					$values  .= "'".mysql_real_escape_string($value)."'";
+				}				
+			}
+			
+			$i++;
+		}
+	
+		if($multiple === false) {
+			
+			$query .= " (".$columns.")";
+			$query .= " VALUES (".$values.") ";
+		}
+	
+		if(isset($query)) {
+	
+			$res = mysql_query($query, $this->conn);
+			
+			if($this->isError($res)) { 
+				
+				trigger_error(sprintf("Error executing 'query' with:\n%s\n\nReason: %s\n\n", $query, mysql_error($this->conn)));
+			}
+			else {
+				
+				return true;
+			}
+		}
+		else if(isset($queries)){
+			
+			foreach($queries as $query) {
+				
+				$res = mysql_query($query, $this->conn);
+				
+				if($this->isError($res)) { 
+					
+					trigger_error(sprintf("Error executing 'query' with:\n%s\n\nReason: %s\n\n", $query, mysql_error($this->conn)));
+				}
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}	
+	
 	public function query($query) {
 		$this->logger->log($query);
 		$query_type = $this->determine_query_type($query);

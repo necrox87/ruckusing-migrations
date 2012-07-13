@@ -62,6 +62,10 @@ class Ruckusing_BaseMigration {
 		return $this->adapter->query($query);
 	}
 	
+	public function seed($table, $data, $multiple = false) {
+		return $this->adapter->seed($table, $data, $multiple);
+	}	
+	
 	public function select_one($sql) {
 		return $this->adapter->select_one($sql);
 	}
