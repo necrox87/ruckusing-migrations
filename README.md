@@ -8,8 +8,6 @@ The idea of the framework was borrowed from the migration system built into Ruby
 
 See the [Wiki](https://github.com/ruckus/ruckusing-migrations/wiki) for the complete documentation on the migration methods supported and how to get started.
 
-See the necrox87 [Wiki](https://github.com/necrox87/ruckusing-migrations/wiki) for the complete documentation on the fork new features
-
 ## Features
 
 
