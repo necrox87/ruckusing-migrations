@@ -637,8 +637,10 @@ class Ruckusing_MySQLAdapter extends Ruckusing_BaseAdapter implements Ruckusing_
         if (isset($options["values"])) {
             if (is_array($options['values'])) {
                 $values = "";
-                foreach ($options['values'] as $i => $v) {
+                $i = 0;
+                foreach ($options['values'] as $v) {
                     $values .= $i == 0 ? "'$v'" : ", '$v'";
+                    $i++;
                 }
             }
         }
