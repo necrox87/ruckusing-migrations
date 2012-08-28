@@ -504,6 +504,7 @@ class Ruckusing_MySQLAdapter extends Ruckusing_BaseAdapter implements Ruckusing_
 
     public function add_foreign_key() {
         
+        throw new Ruckusing_ArgumentException("This functionality is under construction");
     }
     
     public function add_index($table_name, $column_name, $options = array()) {
