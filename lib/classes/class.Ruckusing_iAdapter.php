@@ -21,6 +21,7 @@ interface Ruckusing_iAdapter {
 	public function table_exists($tbl);
 	public function drop_table($tbl);
 	public function rename_table($name, $new_name);
+        public function add_foreign_key();
 
 	//column level operations
 	public function rename_column($table_name, $column_name, $new_column_name);

@@ -502,6 +502,10 @@ class Ruckusing_MySQLAdapter extends Ruckusing_BaseAdapter implements Ruckusing_
 
 //column_info
 
+    public function add_foreign_key() {
+        
+    }
+    
     public function add_index($table_name, $column_name, $options = array()) {
         if (empty($table_name)) {
             throw new Ruckusing_ArgumentException("Missing table name parameter");

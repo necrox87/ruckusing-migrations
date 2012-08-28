@@ -50,6 +50,10 @@ class Ruckusing_BaseMigration {
 		return $this->adapter->add_index($table_name, $column_name, $options);			
 	}
 	
+	public function add_foreign_key() {
+		return $this->adapter->add_foreign_key();
+	}        
+        
 	public function remove_index($table_name, $column_name, $options = array()) {
 		return $this->adapter->remove_index($table_name, $column_name, $options);
 	}
